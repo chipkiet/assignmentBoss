@@ -47,7 +47,6 @@ public class SecurityConfig {
                         // Các yêu cầu khác yêu cầu xác thực
                         .anyRequest().authenticated()
                 )
-                // Cấu hình đăng nhập form
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/perform_login")
@@ -55,29 +54,24 @@ public class SecurityConfig {
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
-                // Cấu hình OAuth2 Login
                 .oauth2Login(oauth2Login -> oauth2Login
                         .loginPage("/login") // Trang login mặc định
                         .successHandler((request, response, authentication) ->
                                 response.sendRedirect("/register")) // Redirect sau khi login thành công
                 )
-                // Xử lý ngoại lệ
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(customAuthenticationEntryPoint))
-                // Cấu hình CSRF
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/profile/update-avatar")
                 )
-                // Cấu hình đăng xuất
                 .logout(logout -> logout
-                        .logoutUrl("/perform_logout")  // URL đăng xuất
-                        .logoutSuccessUrl("/main")     // Chuyển hướng đến /main sau khi đăng xuất
-                        .deleteCookies("JSESSIONID")   // Xóa cookie
-                        .invalidateHttpSession(true)   // Hủy session
-                        .clearAuthentication(true)     // Xóa thông tin xác thực
+                        .logoutUrl("/perform_logout")  
+                        .logoutSuccessUrl("/main")     
+                        .deleteCookies("JSESSIONID")   
+                        .invalidateHttpSession(true)   
+                        .clearAuthentication(true)     
                         .permitAll()
                 )
-                // Cấu hình quản lý session
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                         .maximumSessions(1)
